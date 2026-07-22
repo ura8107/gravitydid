@@ -1,0 +1,22 @@
+Package: jwdid
+Title: Extended Two-Way Fixed Effects Difference-in-Differences
+Version: 0.0.1
+Authors@R: person("jwdid", "contributors", role = c("aut", "cre"), email = "maintainer@example.com")
+Description: A faithful R implementation of the extended two-way fixed effects
+    estimator for staggered difference-in-differences designs.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    fixest,
+    marginaleffects,
+    stats,
+    utils,
+    generics
+Suggests:
+    testthat (>= 3.0.0),
+    did,
+    etwfe,
+    ggplot2
+Config/testthat/edition: 3
