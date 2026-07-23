@@ -27,7 +27,8 @@ Suggests:
     ggplot2,
     knitr,
     rmarkdown,
-    modelsummary
+    modelsummary,
+    broom
 VignetteBuilder: knitr
 URL: https://github.com/ura8107/gravitydid
 BugReports: https://github.com/ura8107/gravitydid/issues
