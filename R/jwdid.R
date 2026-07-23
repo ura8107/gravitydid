@@ -20,6 +20,49 @@
 #' @param cluster,weights Cluster and estimation-weight columns.
 #' @param ... Named arguments passed to the fixest backend.
 #' @return A `jwdid` object.
+#' @details
+#' `hettype` controls which treatment-effect cells enter the regression:
+#' `"timecohort"` (the default) allows cohort-by-time effects, `"cohort"` and
+#' `"time"` impose the corresponding single-index restriction, `"event"`
+#' indexes effects by event time, `"eventcohort"` allows event-by-cohort
+#' effects, and `"twfe"` imposes one common effect. `hettype_ll` and
+#' `hettype_ul` bin event times outside the supplied limits;
+#' `hettype_recode` and `hettype_evbase` provide explicit event-time recoding.
+#'
+#' By default, not-yet-treated observations form the comparison group.
+#' `never = TRUE` instead restricts comparisons to never-treated observations.
+#' `anticipation = k` shifts treatment status back by `k` periods. Thus the R
+#' default, `anticipation = 0`, corresponds to omitting Stata's
+#' `anticipation()` option, while R value `k` corresponds to Stata value
+#' `k + 1`.
+#'
+#' A missing `method` fits the linear ETWFE model with [fixest::feols()].
+#' `"fepois"` and its Stata-compatible alias `"ppmlhdfe"` use
+#' [fixest::fepois()]; `"poisson"`, `"logit"`, and `"probit"` use
+#' [fixest::feglm()]. `corr` adds the unbalanced-panel correction when group
+#' fixed effects are used. `cre` adds correlated-random-effects controls and is
+#' available for the non-absorbed nonlinear models. Supplying `trtvar` enables
+#' continuous treatment intensity; use `asis = TRUE` in [jwdid_aggte()] to
+#' aggregate the observed intensity contrast.
+#'
+#' @examplesIf requireNamespace("did", quietly = TRUE)
+#' data("mpdta", package = "did")
+#' fit <- jwdid(
+#'   lemp ~ 1, mpdta,
+#'   ivar = countyreal, tvar = year, gvar = first.treat,
+#'   never = TRUE
+#' )
+#' fit
+#' jwdid_simple(fit)
+#' @references
+#' Wooldridge, J. M. (2021). Two-Way Fixed Effects, the Two-Way Mundlak
+#' Regression, and Difference-in-Differences Estimators.
+#' \doi{10.2139/ssrn.3906345}.
+#'
+#' Wooldridge, J. M. (2023). Simple approaches to nonlinear
+#' difference-in-differences with panel data. *The Econometrics Journal*, 26,
+#' C31-C66. \doi{10.1093/ectj/utad016}.
+#' @seealso [jwdid_aggte()], [plot.jwdid_aggte()], [fixest::feols()]
 #' @export
 jwdid <- function(fml, data, ivar = NULL, tvar, gvar = NULL, trtvar = NULL,
                   never = FALSE, anticipation = 0,

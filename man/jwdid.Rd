@@ -75,3 +75,52 @@ A \code{jwdid} object.
 \code{anticipation = 0} corresponds to omitting Stata's \code{anticipation()} option.
 R value \code{k} corresponds to Stata \code{anticipation(k + 1)}.
 }
+\details{
+\code{hettype} controls which treatment-effect cells enter the regression:
+\code{"timecohort"} (the default) allows cohort-by-time effects, \code{"cohort"} and
+\code{"time"} impose the corresponding single-index restriction, \code{"event"}
+indexes effects by event time, \code{"eventcohort"} allows event-by-cohort
+effects, and \code{"twfe"} imposes one common effect. \code{hettype_ll} and
+\code{hettype_ul} bin event times outside the supplied limits;
+\code{hettype_recode} and \code{hettype_evbase} provide explicit event-time recoding.
+
+By default, not-yet-treated observations form the comparison group.
+\code{never = TRUE} instead restricts comparisons to never-treated observations.
+\code{anticipation = k} shifts treatment status back by \code{k} periods. Thus the R
+default, \code{anticipation = 0}, corresponds to omitting Stata's
+\code{anticipation()} option, while R value \code{k} corresponds to Stata value
+\code{k + 1}.
+
+A missing \code{method} fits the linear ETWFE model with \code{\link[fixest:feols]{fixest::feols()}}.
+\code{"fepois"} and its Stata-compatible alias \code{"ppmlhdfe"} use
+\code{\link[fixest:feglm]{fixest::fepois()}}; \code{"poisson"}, \code{"logit"}, and \code{"probit"} use
+\code{\link[fixest:feglm]{fixest::feglm()}}. \code{corr} adds the unbalanced-panel correction when group
+fixed effects are used. \code{cre} adds correlated-random-effects controls and is
+available for the non-absorbed nonlinear models. Supplying \code{trtvar} enables
+continuous treatment intensity; use \code{asis = TRUE} in \code{\link[=jwdid_aggte]{jwdid_aggte()}} to
+aggregate the observed intensity contrast.
+}
+\examples{
+\dontshow{if (requireNamespace("did", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+data("mpdta", package = "did")
+fit <- jwdid(
+  lemp ~ 1, mpdta,
+  ivar = countyreal, tvar = year, gvar = first.treat,
+  never = TRUE
+)
+fit
+jwdid_simple(fit)
+\dontshow{\}) # examplesIf}
+}
+\references{
+Wooldridge, J. M. (2021). Two-Way Fixed Effects, the Two-Way Mundlak
+Regression, and Difference-in-Differences Estimators.
+\doi{10.2139/ssrn.3906345}.
+
+Wooldridge, J. M. (2023). Simple approaches to nonlinear
+difference-in-differences with panel data. \emph{The Econometrics Journal}, 26,
+C31-C66. \doi{10.1093/ectj/utad016}.
+}
+\seealso{
+\code{\link[=jwdid_aggte]{jwdid_aggte()}}, \code{\link[=plot.jwdid_aggte]{plot.jwdid_aggte()}}, \code{\link[fixest:feols]{fixest::feols()}}
+}

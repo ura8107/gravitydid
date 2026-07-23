@@ -8,6 +8,24 @@
 #' @param pre,post Lists of graphical parameters for event periods.
 #' @param ... Additional arguments (currently unused).
 #' @return A `ggplot2` object.
+#' @details
+#' `"errorbar"` draws points with vertical intervals, `"ribbon"` draws a line
+#' and shaded interval, `"pointrange"` uses a compact point-range geometry, and
+#' `"bar"` draws bars with interval whiskers. For event studies, `pre` and
+#' `post` can each contain a `colour` value. `tight = TRUE` places sparse
+#' periods at consecutive x positions, and `ref_line = FALSE` removes the
+#' horizontal zero reference.
+#'
+#' @examplesIf requireNamespace("did", quietly = TRUE) && requireNamespace("ggplot2", quietly = TRUE)
+#' data("mpdta", package = "did")
+#' fit <- jwdid(
+#'   lemp ~ 1, mpdta,
+#'   ivar = countyreal, tvar = year, gvar = first.treat,
+#'   never = TRUE
+#' )
+#' event <- jwdid_event(fit, window = c(-3, 3))
+#' plot(event, style = "pointrange")
+#' @seealso [jwdid_aggte()], [ggplot2::ggplot()]
 #' @export
 plot.jwdid_aggte <- function(x,style=c("errorbar","ribbon","pointrange","bar"),
   level=.95,tight=FALSE,ref_line=TRUE,pre=list(),post=list(),...) {

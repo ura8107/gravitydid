@@ -10,7 +10,8 @@ test_that("tidy glance summary and plot methods work", {
   skip_if_not_installed("ggplot2")
   for(s in c("errorbar","ribbon","pointrange","bar")) expect_s3_class(plot(a,style=s),"ggplot")
   expect_s3_class(plot(a,pre=list(colour="navy"),post=list(colour="firebrick")),"ggplot")
-  if (requireNamespace("modelsummary",quietly=TRUE))
+  if (requireNamespace("modelsummary",quietly=TRUE) &&
+      requireNamespace("broom",quietly=TRUE))
     expect_s3_class(modelsummary::modelsummary(m,output="data.frame"),"data.frame")
 })
 

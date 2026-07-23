@@ -4,8 +4,12 @@ Version: 0.0.1
 Authors@R: person("Yuki", "Matsuura", role = c("aut", "cre"), email = "matsuura.yuki.200095@gmail.com")
 Author: Yuki Matsuura [aut, cre]
 Maintainer: Yuki Matsuura <matsuura.yuki.200095@gmail.com>
-Description: A faithful R implementation of the extended two-way fixed effects
-    estimator for staggered difference-in-differences designs.
+Description: Estimates extended two-way fixed-effects difference-in-differences
+    models for staggered interventions following Wooldridge (2021)
+    <doi:10.2139/ssrn.3906345>. Supports flexible treatment-effect
+    heterogeneity, anticipation, covariates, continuous treatment intensity,
+    correlated random effects, panel corrections, and linear or nonlinear
+    response models following Wooldridge (2023) <doi:10.1093/ectj/utad016>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -23,6 +27,9 @@ Suggests:
     ggplot2,
     knitr,
     rmarkdown,
-    modelsummary
+    modelsummary,
+    broom
 VignetteBuilder: knitr
+URL: https://github.com/ura8107/gravitydid
+BugReports: https://github.com/ura8107/gravitydid/issues
 Config/testthat/edition: 3

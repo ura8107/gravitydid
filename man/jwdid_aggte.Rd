@@ -80,3 +80,55 @@ A \code{jwdid_aggte} object.
 \description{
 Aggregate treatment effects
 }
+\details{
+The supported aggregation types are:
+\itemize{
+\item \code{"simple"}: one average treatment effect on the treated (ATT);
+\item \code{"group"}: ATT by first-treatment cohort;
+\item \code{"calendar"}: ATT by calendar period;
+\item \code{"event"}: ATT by event time;
+\item \code{"attgt"}: cohort-by-calendar-time ATT; and
+\item \code{"any"}: an average over all treated observations.
+}
+
+\code{window} drops event times outside two inclusive endpoints, whereas
+\code{cwindow} censors them into the endpoint bins. \code{pretrend = TRUE} appends a
+joint Wald test of available event coefficients before event time -1 and
+requires a model fitted with \code{never = TRUE}. \code{orestriction} restricts the
+aggregation sample. \code{over} splits \code{"simple"} or \code{"any"} estimates and
+\code{over2} splits \code{"group"}, \code{"calendar"}, or \code{"event"} estimates.
+
+\code{engine = "analytic"} obtains standard errors by the delta method directly
+from the fitted model. \code{"marginaleffects"} uses
+\code{\link[marginaleffects:comparisons]{marginaleffects::avg_comparisons()}}, and \code{"auto"} selects an appropriate
+engine for the fitted family.
+}
+\examples{
+\dontshow{if (requireNamespace("did", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+data("mpdta", package = "did")
+fit <- jwdid(
+  lemp ~ 1, mpdta,
+  ivar = countyreal, tvar = year, gvar = first.treat,
+  never = TRUE
+)
+jwdid_simple(fit)
+event <- jwdid_event(fit, window = c(-3, 3), pretrend = TRUE)
+event
+\dontrun{
+plot(event)
+}
+\dontshow{\}) # examplesIf}
+}
+\references{
+Wooldridge, J. M. (2021). Two-Way Fixed Effects, the Two-Way Mundlak
+Regression, and Difference-in-Differences Estimators.
+\doi{10.2139/ssrn.3906345}.
+
+Callaway, B. and Sant'Anna, P. H. C. (2021).
+Difference-in-Differences with multiple time periods.
+\emph{Journal of Econometrics}, 225, 200-230.
+\doi{10.1016/j.jeconom.2020.12.001}.
+}
+\seealso{
+\code{\link[=jwdid]{jwdid()}}, \code{\link[=plot.jwdid_aggte]{plot.jwdid_aggte()}}
+}
