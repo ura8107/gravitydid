@@ -1,0 +1,11 @@
+# R build and check artifacts
+*.Rcheck/
+*.tar.gz
+*.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# Agent and tool state
+.claude/
+.codex/
