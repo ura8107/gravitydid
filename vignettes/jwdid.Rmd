@@ -1,0 +1,20 @@
+---
+title: "Getting started with jwdid"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with jwdid}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+`jwdid()` estimates Wooldridge's extended two-way fixed-effects model.
+
+```{r, eval=FALSE}
+m <- jwdid(lemp ~ 1, did::mpdta, ivar=countyreal, tvar=year,
+           gvar="first.treat", never=TRUE)
+jwdid_simple(m)
+jwdid_event(m)
+```
+
+The R default `anticipation=0` corresponds to omitting Stata's option.
+R `anticipation=k` corresponds to Stata `anticipation(k+1)`.

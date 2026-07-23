@@ -1,0 +1,7 @@
+^\.git$
+^\.claude$
+^\.codex$
+^\.\.Rcheck$
+^DESIGN\.md$
+^jwdid_[0-9.]+\.tar\.gz$
+^jwdid\.Rcheck$

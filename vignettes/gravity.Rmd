@@ -1,0 +1,20 @@
+---
+title: "Gravity and trade applications"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Gravity and trade applications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Count or flow outcomes can be estimated with the Poisson backend.
+
+```{r, eval=FALSE}
+m <- jwdid(trade ~ log_distance, bilateral_panel,
+  ivar=pair_id, tvar=year, gvar=agreement_year,
+  method="fepois", never=TRUE)
+jwdid_event(m)
+```
+
+For continuous treatment intensity, supply `trtvar` and aggregate with
+`asis=TRUE` to contrast observed intensity against zero.

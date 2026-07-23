@@ -9,7 +9,7 @@ jwdid(
   data,
   ivar = NULL,
   tvar,
-  gvar,
+  gvar = NULL,
   trtvar = NULL,
   never = FALSE,
   anticipation = 0,
@@ -32,6 +32,44 @@ jwdid(
   weights = NULL,
   ...
 )
+}
+\arguments{
+\item{fml}{Model formula.}
+
+\item{data}{Data frame.}
+
+\item{ivar, tvar, gvar}{Unit, time, and first-treatment columns.}
+
+\item{trtvar}{Optional continuous treatment column.}
+
+\item{never}{Use never-treated rather than not-yet-treated controls.}
+
+\item{anticipation}{Number of affected pre-treatment periods.}
+
+\item{hettype}{Heterogeneity restriction.}
+
+\item{group}{Use cohort rather than unit fixed effects.}
+
+\item{hettype_ll, hettype_ul}{Event-time binning limits.}
+
+\item{hettype_recode, hettype_evbase}{Event-cohort recode and base.}
+
+\item{xattvar, exogvar, xtvar, xgvar, fevar}{One-sided role formulas.}
+
+\item{xasis}{Use raw rather than cell-demeaned treatment covariates.}
+
+\item{method}{Estimation backend.}
+
+\item{corr}{Apply the unbalanced-panel correction.}
+
+\item{cre}{Apply correlated-random-effects controls.}
+
+\item{cluster, weights}{Cluster and estimation-weight columns.}
+
+\item{...}{Named arguments passed to the fixest backend.}
+}
+\value{
+A \code{jwdid} object.
 }
 \description{
 \code{anticipation = 0} corresponds to omitting Stata's \code{anticipation()} option.

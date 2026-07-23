@@ -1,0 +1,23 @@
+---
+title: "Migrating from Stata jwdid"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Migrating from Stata jwdid}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+| Stata | R |
+|---|---|
+| `jwdid y x, ivar(i) tvar(t) gvar(g)` | `jwdid(y~x, ivar=i, tvar=t, gvar=g)` |
+| `never` | `never=TRUE` |
+| `anticipation(2)` | `anticipation=1` |
+| `estat event, window(-3 3)` | `jwdid_event(m, window=c(-3,3))` |
+| `estat event, pretrend` | `jwdid_event(m, pretrend=TRUE)` |
+
+For parity with released Stata `jwdid`, `hettype_ll` also applies under the
+not-yet-treated control mode. This preserves an upstream macro-expansion bug
+intentionally; it is covered by regression tests.
+
+Use `jwdid_aggte()`, not bare `aggte()`, because the `did` package exports an
+unrelated function with that name.

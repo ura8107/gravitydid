@@ -68,11 +68,11 @@
   },numeric(1))
   V <- G %*% stats::vcov(fit) %*% t(G)
   se <- sqrt(pmax(diag(V), 0)); z <- ifelse(se == 0, NA_real_, b / se)
-  data.frame(term = lev, estimate = b, std.error = se,
+  tab <- data.frame(term = lev, estimate = b, std.error = se,
     conf.low = b - stats::qnorm(.975) * se,
     conf.high = b + stats::qnorm(.975) * se,
-    statistic = z, p.value = 2 * stats::pnorm(-abs(z)), check.names = FALSE) |>
-    list(table = _, b = setNames(b, lev), V = V)
+    statistic = z, p.value = 2 * stats::pnorm(-abs(z)), check.names = FALSE)
+  list(table = tab, b = setNames(b, lev), V = V)
 }
 
 .jwdid_marginaleffects <- function(object, dat, rows, by = NULL, agg_weights=NULL) {
@@ -101,13 +101,32 @@
 }
 
 #' Aggregate treatment effects
+#'
+#' @param object A fitted `jwdid` object.
+#' @param type Aggregation type.
+#' @param weights Optional aggregation weights.
+#' @param orestriction Optional logical restriction evaluated in the model frame.
+#' @param over,over2 Optional grouping variables.
+#' @param window,cwindow Event-time selection or censoring endpoints.
+#' @param pretrend Compute the joint pre-trend Wald test.
+#' @param asis Use observed continuous treatment intensity.
+#' @param engine Contrast engine.
+#' @param ... Reserved; unknown arguments are rejected.
+#' @return A `jwdid_aggte` object.
 #' @export
 jwdid_aggte <- function(object, type = c("simple", "group", "calendar", "event"),
                   weights = NULL, orestriction = NULL, over = NULL, over2 = NULL,
                   window = NULL, cwindow = NULL, pretrend = FALSE,
                   asis = FALSE,
                   engine = c("auto", "analytic", "marginaleffects"), ...) {
+  raw_names <- names(as.list(sys.call()))[-1L]
+  raw_names <- raw_names[nzchar(raw_names)]
+  exact <- setdiff(names(formals(jwdid_aggte)),"...")
+  partial <- setdiff(raw_names,exact)
+  if (length(partial)) stop("Unknown argument(s): ",paste(partial,collapse=", "),call.=FALSE)
   if (!inherits(object, "jwdid")) stop("`object` must be a jwdid model.", call. = FALSE)
+  dots <- list(...)
+  if (length(dots)) stop("Unknown argument(s): ",paste(names(dots),collapse=", "),call.=FALSE)
   type <- match.arg(type,c("simple","group","calendar","event","attgt","any")); engine <- match.arg(engine)
   if (!is.null(window) && !is.null(cwindow)) stop("`window` and `cwindow` are mutually exclusive.",call.=FALSE)
   for (z in list(window,cwindow)) if (!is.null(z) && (length(z)!=2L || z[1]>=z[2]))
@@ -170,17 +189,24 @@ jwdid_aggte <- function(object, type = c("simple", "group", "calendar", "event")
 
 # Kept internal for source compatibility; not exported because did::aggte masks it.
 aggte <- jwdid_aggte
+#' @rdname jwdid_aggte
 #' @export
 estat <- jwdid_aggte
+#' @rdname jwdid_aggte
 #' @export
 jwdid_simple <- function(object, ...) jwdid_aggte(object, "simple", ...)
+#' @rdname jwdid_aggte
 #' @export
 jwdid_group <- function(object, ...) jwdid_aggte(object, "group", ...)
+#' @rdname jwdid_aggte
 #' @export
 jwdid_calendar <- function(object, ...) jwdid_aggte(object, "calendar", ...)
+#' @rdname jwdid_aggte
 #' @export
 jwdid_event <- function(object, ...) jwdid_aggte(object, "event", ...)
+#' @rdname jwdid_aggte
 #' @export
 jwdid_attgt <- function(object, ...) jwdid_aggte(object, "attgt", ...)
+#' @rdname jwdid_aggte
 #' @export
 jwdid_any <- function(object, ...) jwdid_aggte(object, "any", ...)

@@ -2,6 +2,13 @@
 % Please edit documentation in R/aggte.R
 \name{jwdid_aggte}
 \alias{jwdid_aggte}
+\alias{estat}
+\alias{jwdid_simple}
+\alias{jwdid_group}
+\alias{jwdid_calendar}
+\alias{jwdid_event}
+\alias{jwdid_attgt}
+\alias{jwdid_any}
 \title{Aggregate treatment effects}
 \usage{
 jwdid_aggte(
@@ -14,9 +21,61 @@ jwdid_aggte(
   window = NULL,
   cwindow = NULL,
   pretrend = FALSE,
+  asis = FALSE,
   engine = c("auto", "analytic", "marginaleffects"),
   ...
 )
+
+estat(
+  object,
+  type = c("simple", "group", "calendar", "event"),
+  weights = NULL,
+  orestriction = NULL,
+  over = NULL,
+  over2 = NULL,
+  window = NULL,
+  cwindow = NULL,
+  pretrend = FALSE,
+  asis = FALSE,
+  engine = c("auto", "analytic", "marginaleffects"),
+  ...
+)
+
+jwdid_simple(object, ...)
+
+jwdid_group(object, ...)
+
+jwdid_calendar(object, ...)
+
+jwdid_event(object, ...)
+
+jwdid_attgt(object, ...)
+
+jwdid_any(object, ...)
+}
+\arguments{
+\item{object}{A fitted \code{jwdid} object.}
+
+\item{type}{Aggregation type.}
+
+\item{weights}{Optional aggregation weights.}
+
+\item{orestriction}{Optional logical restriction evaluated in the model frame.}
+
+\item{over, over2}{Optional grouping variables.}
+
+\item{window, cwindow}{Event-time selection or censoring endpoints.}
+
+\item{pretrend}{Compute the joint pre-trend Wald test.}
+
+\item{asis}{Use observed continuous treatment intensity.}
+
+\item{engine}{Contrast engine.}
+
+\item{...}{Reserved; unknown arguments are rejected.}
+}
+\value{
+A \code{jwdid_aggte} object.
 }
 \description{
 Aggregate treatment effects

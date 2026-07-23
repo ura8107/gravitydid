@@ -2,6 +2,24 @@
 #'
 #' `anticipation = 0` corresponds to omitting Stata's `anticipation()` option.
 #' R value `k` corresponds to Stata `anticipation(k + 1)`.
+#' @param fml Model formula.
+#' @param data Data frame.
+#' @param ivar,tvar,gvar Unit, time, and first-treatment columns.
+#' @param trtvar Optional continuous treatment column.
+#' @param never Use never-treated rather than not-yet-treated controls.
+#' @param anticipation Number of affected pre-treatment periods.
+#' @param hettype Heterogeneity restriction.
+#' @param group Use cohort rather than unit fixed effects.
+#' @param hettype_ll,hettype_ul Event-time binning limits.
+#' @param hettype_recode,hettype_evbase Event-cohort recode and base.
+#' @param xattvar,exogvar,xtvar,xgvar,fevar One-sided role formulas.
+#' @param xasis Use raw rather than cell-demeaned treatment covariates.
+#' @param method Estimation backend.
+#' @param corr Apply the unbalanced-panel correction.
+#' @param cre Apply correlated-random-effects controls.
+#' @param cluster,weights Cluster and estimation-weight columns.
+#' @param ... Named arguments passed to the fixest backend.
+#' @return A `jwdid` object.
 #' @export
 jwdid <- function(fml, data, ivar = NULL, tvar, gvar = NULL, trtvar = NULL,
                   never = FALSE, anticipation = 0,
