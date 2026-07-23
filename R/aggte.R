@@ -113,6 +113,51 @@
 #' @param engine Contrast engine.
 #' @param ... Reserved; unknown arguments are rejected.
 #' @return A `jwdid_aggte` object.
+#' @details
+#' The supported aggregation types are:
+#'
+#' * `"simple"`: one average treatment effect on the treated (ATT);
+#' * `"group"`: ATT by first-treatment cohort;
+#' * `"calendar"`: ATT by calendar period;
+#' * `"event"`: ATT by event time;
+#' * `"attgt"`: cohort-by-calendar-time ATT; and
+#' * `"any"`: an average over all treated observations.
+#'
+#' `window` drops event times outside two inclusive endpoints, whereas
+#' `cwindow` censors them into the endpoint bins. `pretrend = TRUE` appends a
+#' joint Wald test of available event coefficients before event time -1 and
+#' requires a model fitted with `never = TRUE`. `orestriction` restricts the
+#' aggregation sample. `over` splits `"simple"` or `"any"` estimates and
+#' `over2` splits `"group"`, `"calendar"`, or `"event"` estimates.
+#'
+#' `engine = "analytic"` obtains standard errors by the delta method directly
+#' from the fitted model. `"marginaleffects"` uses
+#' [marginaleffects::avg_comparisons()], and `"auto"` selects an appropriate
+#' engine for the fitted family.
+#'
+#' @examplesIf requireNamespace("did", quietly = TRUE)
+#' data("mpdta", package = "did")
+#' fit <- jwdid(
+#'   lemp ~ 1, mpdta,
+#'   ivar = countyreal, tvar = year, gvar = first.treat,
+#'   never = TRUE
+#' )
+#' jwdid_simple(fit)
+#' event <- jwdid_event(fit, window = c(-3, 3), pretrend = TRUE)
+#' event
+#' \dontrun{
+#' plot(event)
+#' }
+#' @references
+#' Wooldridge, J. M. (2021). Two-Way Fixed Effects, the Two-Way Mundlak
+#' Regression, and Difference-in-Differences Estimators.
+#' \doi{10.2139/ssrn.3906345}.
+#'
+#' Callaway, B. and Sant'Anna, P. H. C. (2021).
+#' Difference-in-Differences with multiple time periods.
+#' *Journal of Econometrics*, 225, 200-230.
+#' \doi{10.1016/j.jeconom.2020.12.001}.
+#' @seealso [jwdid()], [plot.jwdid_aggte()]
 #' @export
 jwdid_aggte <- function(object, type = c("simple", "group", "calendar", "event"),
                   weights = NULL, orestriction = NULL, over = NULL, over2 = NULL,

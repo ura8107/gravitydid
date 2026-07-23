@@ -7,14 +7,46 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Count or flow outcomes can be estimated with the Poisson backend.
-
-```{r, eval=FALSE}
-m <- jwdid(trade ~ log_distance, bilateral_panel,
-  ivar=pair_id, tvar=year, gvar=agreement_year,
-  method="fepois", never=TRUE)
-jwdid_event(m)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(jwdid)
+set.seed(8107)
 ```
 
-For continuous treatment intensity, supply `trtvar` and aggregate with
-`asis=TRUE` to contrast observed intensity against zero.
+Trade flows and other nonnegative outcomes can be estimated with the Poisson
+backend. The small balanced panel below mimics bilateral flows after an
+agreement begins for two cohorts.
+
+```{r simulate}
+pairs <- 1:120
+years <- 2015:2022
+trade <- expand.grid(pair_id = pairs, year = years)
+trade$agreement_year <- c(rep(2018, 40), rep(2020, 40), rep(0, 40))[trade$pair_id]
+trade$log_distance <- log(runif(length(pairs), 200, 8000))[trade$pair_id]
+treated <- trade$agreement_year > 0 & trade$year >= trade$agreement_year
+pair_effect <- rnorm(length(pairs), 1.5, 0.3)[trade$pair_id]
+year_effect <- 0.03 * (trade$year - min(years))
+trade$flow <- rpois(
+  nrow(trade),
+  exp(pair_effect + year_effect - 0.12 * trade$log_distance + 0.25 * treated)
+)
+head(trade)
+```
+
+`method = "fepois"` absorbs pair and year fixed effects. Never-treated pairs
+form the comparison group.
+
+```{r poisson}
+m <- jwdid(
+  flow ~ log_distance, trade,
+  ivar = pair_id, tvar = year, gvar = agreement_year,
+  method = "fepois", never = TRUE
+)
+jwdid_simple(m)
+jwdid_event(m, window = c(-2, 3))
+```
+
+For a continuous treatment, supply `trtvar` in place of a treatment cohort.
+`jwdid_aggte(..., asis = TRUE)` then contrasts each observed intensity with
+zero. The estimand differs from the binary agreement example, so its scale
+should be stated explicitly when results are reported.

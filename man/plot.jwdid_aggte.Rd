@@ -36,3 +36,26 @@ A \code{ggplot2} object.
 \description{
 Plot aggregated treatment effects
 }
+\details{
+\code{"errorbar"} draws points with vertical intervals, \code{"ribbon"} draws a line
+and shaded interval, \code{"pointrange"} uses a compact point-range geometry, and
+\code{"bar"} draws bars with interval whiskers. For event studies, \code{pre} and
+\code{post} can each contain a \code{colour} value. \code{tight = TRUE} places sparse
+periods at consecutive x positions, and \code{ref_line = FALSE} removes the
+horizontal zero reference.
+}
+\examples{
+\dontshow{if (requireNamespace("did", quietly = TRUE) && requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+data("mpdta", package = "did")
+fit <- jwdid(
+  lemp ~ 1, mpdta,
+  ivar = countyreal, tvar = year, gvar = first.treat,
+  never = TRUE
+)
+event <- jwdid_event(fit, window = c(-3, 3))
+plot(event, style = "pointrange")
+\dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=jwdid_aggte]{jwdid_aggte()}}, \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
+}

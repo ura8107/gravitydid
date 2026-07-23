@@ -7,17 +7,41 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(jwdid)
+```
+
+The R interface follows the released Stata command while using formulas and
+ordinary R vectors.
+
 | Stata | R |
 |---|---|
-| `jwdid y x, ivar(i) tvar(t) gvar(g)` | `jwdid(y~x, ivar=i, tvar=t, gvar=g)` |
-| `never` | `never=TRUE` |
-| `anticipation(2)` | `anticipation=1` |
-| `estat event, window(-3 3)` | `jwdid_event(m, window=c(-3,3))` |
-| `estat event, pretrend` | `jwdid_event(m, pretrend=TRUE)` |
+| `jwdid y x, ivar(i) tvar(t) gvar(g)` | `jwdid(y ~ x, data, ivar = i, tvar = t, gvar = g)` |
+| `never` | `never = TRUE` |
+| `anticipation(2)` | `anticipation = 1` |
+| `estat event, window(-3 3)` | `jwdid_event(m, window = c(-3, 3))` |
+| `estat event, pretrend` | `jwdid_event(m, pretrend = TRUE)` |
+
+Here is a complete translation:
+
+```{r fit}
+data("mpdta", package = "did")
+m <- jwdid(
+  lemp ~ 1, mpdta,
+  ivar = countyreal, tvar = year, gvar = first.treat,
+  never = TRUE
+)
+estat(m, type = "simple")
+jwdid_event(m, window = c(-3, 3), pretrend = TRUE)
+```
+
+`jwdid_aggte()` is the explicit post-estimation entry point. The bare name
+`aggte()` is intentionally not exported because `did` exports an unrelated
+function with that name. Typed wrappers include `jwdid_simple()`,
+`jwdid_group()`, `jwdid_calendar()`, `jwdid_event()`, `jwdid_attgt()`, and
+`jwdid_any()`.
 
 For parity with released Stata `jwdid`, `hettype_ll` also applies under the
-not-yet-treated control mode. This preserves an upstream macro-expansion bug
-intentionally; it is covered by regression tests.
-
-Use `jwdid_aggte()`, not bare `aggte()`, because the `did` package exports an
-unrelated function with that name.
+not-yet-treated control mode. This preserves an upstream macro-expansion
+behavior intentionally and is covered by regression tests.

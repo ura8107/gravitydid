@@ -4,4 +4,8 @@
 ^\.\.Rcheck$
 ^DESIGN\.md$
 ^jwdid_[0-9.]+\.tar\.gz$
+^jwdid_[0-9.]+\.pdf$
 ^jwdid\.Rcheck$
+^README\.Rmd$
+^cran-comments\.md$
+^\.github$

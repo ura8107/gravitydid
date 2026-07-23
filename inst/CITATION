@@ -1,0 +1,19 @@
+citHeader("To cite jwdid in publications use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "jwdid: Extended Two-Way Fixed Effects Difference-in-Differences",
+  author = person("Yuki", "Matsuura"),
+  year = "2026",
+  note = "R package version 0.0.1",
+  url = "https://github.com/ura8107/gravitydid"
+)
+
+bibentry(
+  bibtype = "Article",
+  title = "Two-Way Fixed Effects, the Two-Way Mundlak Regression, and Difference-in-Differences Estimators",
+  author = person("Jeffrey M.", "Wooldridge"),
+  year = "2021",
+  journal = "SSRN Electronic Journal",
+  doi = "10.2139/ssrn.3906345"
+)
